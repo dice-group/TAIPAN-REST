@@ -5,3 +5,6 @@ subject_column_identification:
 
 recommend_properties:
 	resttest.py http://localhost:80 recommend_properties.yaml
+
+generate_sml_mapping:
+	resttest.py http://localhost:80 generate_sml_mapping.yaml

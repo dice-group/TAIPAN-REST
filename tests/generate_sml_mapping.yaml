@@ -1,0 +1,12 @@
+---
+- config:
+    - testset: "SML Mapping Generation tests"
+
+- test:
+    - group: "Generate SML Mapping"
+    - name: "Submit table for sml mapping generation"
+    - method: "POST"
+    - url: "/table/api/v1.0/generate_sml_mapping"
+    - headers: {'Content-Type': 'text/csv', 'charset': 'utf-8', 'X-Subject-Namespace': 'http://example.org/'}
+    - body: "\"Region\",\"Currency\",\"Price\",\"Price in ?\"\n\"Australia SA+WA\",\"AUD\",\"24.95\",\"15.91\"\n\"Israel\",\"ILS\",\"79\",\"15.03\"\n\"Australia\",\"AUD\",\"19.99\",\"12.75\"\n\"Kuwait\",\"KWD\",\"4.50\",\"11.08\"\n\"Canada\",\"CAD\",\"14.99\",\"10.02\""
+    - expected_status: [200]
