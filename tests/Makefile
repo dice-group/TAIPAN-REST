@@ -1,4 +1,4 @@
-default: subject_column_identification recommend_properties
+default: subject_column_identification recommend_properties generate_sml_mapping
 
 subject_column_identification:
 	resttest.py http://localhost:80 subject_column_identification.yaml
