@@ -16,7 +16,7 @@ make run
 
 You can also deploy docker container directly from Docker Hub.
 ```
-docker run -p 80:5000 dice-group/taipan-rest
+docker run -p 80:5000 dice-group/taipan:1.0.0
 ```
 
 # Usage
