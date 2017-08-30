@@ -8,7 +8,7 @@ RUN pip install flask==0.12.2
 #For debug only
 RUN pip install ipdb
 
-ADD startup.sh /startup.sh
+ADD startup-dev.sh /startup.sh
 RUN chmod +x /startup.sh
 
 CMD ["/startup.sh"]

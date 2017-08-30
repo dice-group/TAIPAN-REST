@@ -14,8 +14,22 @@ app = Flask(__name__)
 def identify_subject_column():
     if not request.data:
         abort(400)
+
+    delimiter = ","
+    quotechar = '"'
+    if "X-Delimiter" in request.headers:
+        delimiter = request.headers["X-Delimiter"]
+        delimiter = " " if delimiter == "space" else delimiter
+    if "X-QuoteChar" in request.headers:
+        quotechar = request.headers["X-QuoteChar"]
     table_string = request.data.decode("utf-8")
-    table = GenericTable("stub", _id=None, csv_string=table_string)
+    table = GenericTable(
+        "stub",
+        _id=None,
+        csv_string=table_string,
+        delimiter=delimiter,
+        quotechar=quotechar
+    )
     table.init()
     SCIDENTIFIER = SCIdentifier()
     subject_column = SCIDENTIFIER.identify_subject_column(table)
@@ -26,8 +40,23 @@ def identify_subject_column():
 def recommend_properties():
     if not request.data:
         abort(400)
+
+    delimiter = ","
+    quotechar = '"'
+    if "X-Delimiter" in request.headers:
+        delimiter = request.headers["X-Delimiter"]
+        delimiter = " " if delimiter == "space" else delimiter
+    if "X-QuoteChar" in request.headers:
+        quotechar = request.headers["X-QuoteChar"]
+
     table_string = request.data.decode("utf-8")
-    table = GenericTable("stub", _id=None, csv_string=table_string)
+    table = GenericTable(
+        "stub",
+        _id=None,
+        csv_string=table_string,
+        delimiter=delimiter,
+        quotechar=quotechar
+    )
     table.init()
     properties = get_table_properties(table)
     return jsonify(properties), 200
@@ -37,15 +66,31 @@ def recommend_properties():
 def generate_sml_mapping():
     if not request.data:
         abort(400)
+    if not "X-Subject-Namespace" in request.headers:
+        abort(400)
+
+    delimiter = ","
+    quotechar = '"'
+    if "X-Delimiter" in request.headers:
+        delimiter = request.headers["X-Delimiter"]
+        delimiter = " " if delimiter == "space" else delimiter
+    if "X-QuoteChar" in request.headers:
+        quotechar = request.headers["X-QuoteChar"]
+
     subject_namespace = request.headers["X-Subject-Namespace"]
     table_string = request.data.decode("utf-8")
-    table = GenericTable("stub", _id=None, csv_string=table_string)
+    table = GenericTable(
+        "stub",
+        _id=None,
+        csv_string=table_string,
+        delimiter=delimiter,
+        quotechar=quotechar
+    )
     table.init()
     sc_ident = SCIdentifier()
     subject_column = sc_ident.identify_subject_column(table)
     property_mappings = get_table_properties(table)
     sml_mapping = TaipanToSML(property_mappings, subject_namespace, subject_column[0])
-    print(sml_mapping.get_mapping())
     return sml_mapping.get_mapping(), 200
 
 

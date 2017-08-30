@@ -10,3 +10,31 @@
     - headers: {'Content-Type': 'text/csv', 'charset': 'utf-8', 'X-Subject-Namespace': 'http://example.org/'}
     - body: "\"Region\",\"Currency\",\"Price\",\"Price in ?\"\n\"Australia SA+WA\",\"AUD\",\"24.95\",\"15.91\"\n\"Israel\",\"ILS\",\"79\",\"15.03\"\n\"Australia\",\"AUD\",\"19.99\",\"12.75\"\n\"Kuwait\",\"KWD\",\"4.50\",\"11.08\"\n\"Canada\",\"CAD\",\"14.99\",\"10.02\""
     - expected_status: [200]
+
+- test:
+    - group: "Generate SML Mapping"
+    - name: "Submit table for sml mapping generation, should return SML mapping"
+    - method: "POST"
+    - url: "/table/api/v1.0/generate_sml_mapping"
+    - headers: {'Content-Type': 'text/csv', 'charset': 'utf-8', 'X-Subject-Namespace': 'http://example.org/'}
+    - body: "\"Region\",\"Currency\",\"Price\",\"Price in ?\"\n\"Australia SA+WA\",\"AUD\",\"24.95\",\"15.91\"\n\"Israel\",\"ILS\",\"79\",\"15.03\"\n\"Australia\",\"AUD\",\"19.99\",\"12.75\"\n\"Kuwait\",\"KWD\",\"4.50\",\"11.08\"\n\"Canada\",\"CAD\",\"14.99\",\"10.02\""
+    - validators:
+        - compare: {raw_body: "", comparator: "contains", expected: '?subjectVariable = uri(concat("http://example.org/",' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable1 = plainLiteral(?1)' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable2 = plainLiteral(?2)' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable3 = plainLiteral(?3)' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable4 = plainLiteral(?4)' }
+
+- test:
+    - group: "Generate SML Mapping"
+    - name: "Submit table for sml mapping generation, space delimiter"
+    - method: "POST"
+    - url: "/table/api/v1.0/generate_sml_mapping"
+    - headers: {'Content-Type': 'text/csv', 'charset': 'utf-8', 'X-Subject-Namespace': 'http://example.org/', 'X-Delimiter': 'space'}
+    - body: "timestamp longitude latitude \"speed m/s\"\n1305093212000 13.587170 52.425710 8.33\n1305093213000 13.587030 52.425690 8.33\n1305093214000 13.586920 52.425690 8.33\n1305093215000 13.586810 52.425660 8.33\n1305093216000 13.586730 52.425650 3.89"
+    - validators:
+        - compare: {raw_body: "", comparator: "contains", expected: '?subjectVariable = uri(concat("http://example.org/",' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable1 = plainLiteral(?1)' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable2 = plainLiteral(?2)' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable3 = plainLiteral(?3)' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable4 = plainLiteral(?4)' }

@@ -10,3 +10,13 @@
     - headers: {'Content-Type': 'text/csv', 'charset': 'utf-8'}
     - body: "\"Region\",\"Currency\",\"Price\",\"Price in ?\"\n\"Australia SA+WA\",\"AUD\",\"24.95\",\"15.91\"\n\"Israel\",\"ILS\",\"79\",\"15.03\"\n\"Australia\",\"AUD\",\"19.99\",\"12.75\"\n\"Kuwait\",\"KWD\",\"4.50\",\"11.08\"\n\"Canada\",\"CAD\",\"14.99\",\"10.02\""
     - expected_status: [200]
+
+- test:
+    - group: "Subject Column Identification"
+    - name: "Subject column identification should return array with integers"
+    - method: "POST"
+    - url: "/table/api/v1.0/identify_subject_column"
+    - headers: {'Content-Type': 'text/csv', 'charset': 'utf-8'}
+    - body: "\"Region\",\"Currency\",\"Price\",\"Price in ?\"\n\"Australia SA+WA\",\"AUD\",\"24.95\",\"15.91\"\n\"Israel\",\"ILS\",\"79\",\"15.03\"\n\"Australia\",\"AUD\",\"19.99\",\"12.75\"\n\"Kuwait\",\"KWD\",\"4.50\",\"11.08\"\n\"Canada\",\"CAD\",\"14.99\",\"10.02\""
+    - validators:
+        - compare: {raw_body: "", comparator: "contains", expected: "[\n    2\n  ]\n" }
