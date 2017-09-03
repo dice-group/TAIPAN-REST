@@ -1,0 +1,16 @@
+---
+- config:
+    - testset: "SML Mapping Generation tests"
+
+- test:
+    - group: "Generate SML Mapping"
+    - name: "Throw index out of bounds exceptions"
+    - method: "POST"
+    - url: "/table/api/v1.0/generate_sml_mapping"
+    - headers: {'Content-Type': 'text/csv', 'charset': 'utf-8', 'X-Subject-Namespace': 'http://example.org/', 'X-Delimiter': ';'}
+    - body: "Verkaufsstellennr.;Name 1;Name 2;Name 3;Strasse;PLZ;Ort;Adresszusatz;Typ;Öffnungszeiten Montag 1;Öffnungszeiten Montag 2;Öffnungszeiten Montag 3;Öffnungszeiten Dienstag 1;Öffnungszeiten Dienstag 2;Öffnungszeiten Dienstag 3;Öffnungszeiten Mittwoch 1;Öffnungszeiten Mittwoch 2;Öffnungszeiten Mittwoch 3;Öffnungszeiten Donnerstag 1;Öffnungszeiten Donnerstag 2;Öffnungszeiten Donnerstag 3;Öffnungszeiten Freitag 1;Öffnungszeiten Freitag 2;Öffnungszeiten Freitag 3;Öffnungszeiten Samstag 1;Öffnungszeiten Samstag 2;Öffnungszeiten Samstag 3;Öffnungszeiten Sonntag 1;Öffnungszeiten Sonntag 2;Öffnungszeiten Sonntag 3;Koord_Lat;Koord_Lon\n503979;Reisezentrum Aachen Hbf;;;Bahnhofplatz 2a;52064;Aachen;;Reisezentrum;06:00-21:00;;;06:00-21:00;;;06:00-21:00;;;06:00-21:00;;;06:00-21:00;;;07:00-20:00;;;08:00-20:00;;;50768944;6090200"
+    - expected_status: [200]
+    - validators:
+        - compare: {raw_body: "", comparator: "contains", expected: '?subjectVariable = uri(concat("http://example.org/", fn:urlEncode(?5)))' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable32 = plainLiteral(?1)' }
+        - compare: {raw_body: "", comparator: "contains", expected: '?columnVariable32 = plainLiteral(?32)' }
